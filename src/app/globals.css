@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme */
+  --background: #f6f8fc;
+  --foreground: #0b1220;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --muted: #5b6b85;
+  --primary: #2563eb;
+  --primary-soft: #3b82f6;
+  --primary-foreground: #ffffff;
+  --glow: 37, 99, 235;
+}
+
+.dark {
+  /* Dark theme (default) */
+  --background: #060a14;
+  --foreground: #e7edf7;
+  --card: #0d1526;
+  --card-border: #1e2a44;
+  --muted: #93a3be;
+  --primary: #3b82f6;
+  --primary-soft: #60a5fa;
+  --primary-foreground: #04070f;
+  --glow: 59, 130, 246;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--card-border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  /* Fallback backdrop shown behind the WebGL canvas (or if WebGL is off) */
+  background: var(--background);
 }
 
 body {
-  background: var(--background);
+  /* Transparent so the fixed -z-10 Three.js canvas shows through */
+  background: transparent;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: color 0.3s ease;
+}
+
+/* Decorative grid backdrop */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(120deg, var(--primary-soft), var(--primary), var(--primary-soft));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Floating glow blobs */
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(20px); }
+}
+.animate-float {
+  animation: float 12s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }

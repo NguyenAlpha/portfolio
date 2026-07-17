@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# project planning notes (not for public repo)
+MY_INFO.md
+# duplicate CV (site uses Nhat-Nguyen-CV.pdf)
+public/CV IT.pdf
