@@ -15,9 +15,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.nhatnguyenhuynh.com"),
   title: "Nhat Nguyen — Backend Developer",
   description:
     "Backend Developer specializing in Java & Spring Boot. Building scalable RESTful APIs and high-performance systems.",
+  keywords: [
+    "Nhat Nguyen",
+    "Backend Developer",
+    "Java",
+    "Spring Boot",
+    "PostgreSQL",
+    "Redis",
+    "Portfolio",
+  ],
+  authors: [{ name: "Nhat Nguyen" }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Nhat Nguyen — Backend Developer",
+    title: "Nhat Nguyen — Backend Developer",
+    description:
+      "Building scalable, high-performance backend systems with Java & Spring Boot.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nhat Nguyen — Backend Developer",
+    description:
+      "Building scalable, high-performance backend systems with Java & Spring Boot.",
+  },
 };
 
 export default function RootLayout({
