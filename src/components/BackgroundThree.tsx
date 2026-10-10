@@ -170,10 +170,15 @@ export function BackgroundThree() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       scroll = max > 0 ? window.scrollY / max : 0;
     };
+    // reduced-motion: static frame must be redrawn after resize/theme change
+    let dirty = true;
+    let lastTheme: "dark" | "light" | null = null;
+
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      dirty = true;
     };
 
     window.addEventListener("pointermove", onPointer, { passive: true });
@@ -182,7 +187,8 @@ export function BackgroundThree() {
     onScroll();
 
     // --- render -------------------------------------------------------
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
+    timer.connect(document); // ignores time spent in a hidden tab
     const nodeColor = new THREE.Color();
     const lineColor = new THREE.Color();
 
@@ -206,8 +212,9 @@ export function BackgroundThree() {
       dustMat.blending = blending;
     }
 
-    function frame() {
-      const t = clock.getElapsedTime();
+    function frame(timestamp: number) {
+      timer.update(timestamp);
+      const t = timer.getElapsed();
 
       // idle spin + scroll-driven extra turn
       const targetY = pointer.x * 0.35 + scroll * Math.PI * 2 + t * 0.06;
@@ -230,21 +237,24 @@ export function BackgroundThree() {
 
     let raf = 0;
     let running = true;
-    const loop = () => {
-      if (running) frame();
+    const loop = (timestamp: number) => {
+      if (reducedMotion) {
+        // static frame, re-rendered only when size or theme changed
+        if (dirty || lastTheme !== themeRef.current) {
+          applyPalette();
+          renderer.render(scene, camera);
+          dirty = false;
+          lastTheme = themeRef.current;
+        }
+      } else if (running) {
+        frame(timestamp);
+      }
       raf = requestAnimationFrame(loop);
     };
-
-    if (reducedMotion) {
-      applyPalette();
-      renderer.render(scene, camera); // single static frame
-    } else {
-      loop();
-    }
+    raf = requestAnimationFrame(loop);
 
     const onVisibility = () => {
       running = document.visibilityState === "visible";
-      if (running) clock.getDelta(); // avoid time jump
     };
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -264,6 +274,7 @@ export function BackgroundThree() {
       shellMat.dispose();
       dustMat.dispose();
       glow.dispose();
+      timer.dispose();
       renderer.dispose();
     };
   }, []);
