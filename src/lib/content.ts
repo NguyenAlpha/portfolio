@@ -28,6 +28,8 @@ type Dict = {
   projects: {
     title: string;
     subtitle: string;
+    demoLabel: string;
+    loginLabel: string;
     items: {
       name: string;
       period: string;
@@ -36,6 +38,10 @@ type Dict = {
       tech: string[];
       features: string[];
       status: string;
+      image: { src: string; srcDark: string; alt: string };
+      demo: { url: string; login: string };
+      api: string;
+      repos: { label: string; url: string }[];
     }[];
   };
   education: {
@@ -113,23 +119,38 @@ export const CONTENT: Record<Lang, Dict> = {
     projects: {
       title: "Dự án nổi bật",
       subtitle: "Những sản phẩm tôi đã xây dựng",
+      demoLabel: "Xem demo",
+      loginLabel: "Tài khoản thử",
       items: [
         {
-          name: "QuikTech — POS & Inventory",
+          name: "QuikTech POS",
           period: "12/2025 – 04/2026",
-          tagline: "Hệ thống quản lý bán hàng & kho vận Multi-tenant B2B SaaS",
+          tagline: "Phần mềm bán hàng, quản lý kho & công nợ — Multi-tenant B2B SaaS",
           description:
-            "Backend cho hệ thống POS & quản lý kho hỗ trợ vận hành ở cấp doanh nghiệp và cửa hàng, với hơn 16 module: bán hàng, nhập hàng, tồn kho, công nợ, subscription billing và dashboard analytics.",
-          tech: ["Java 21", "Spring Boot 3.5", "PostgreSQL", "Redis", "JWT", "Next.js", "TypeScript"],
+            "Phần mềm bán hàng, quản lý kho và công nợ cho doanh nghiệp nhỏ: một doanh nghiệp có nhiều cửa hàng, dữ liệu tách biệt theo cửa hàng, phân quyền theo vai trò. Tự làm cả backend (Spring Boot) lẫn frontend (Next.js), deploy trên Azure và Vercel.",
+          tech: ["Java 25", "Spring Boot 4.1", "Spring Security + JWT", "PostgreSQL 16", "Flyway", "Redis 7", "Bucket4j", "Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "Docker", "Azure", "Vercel"],
           features: [
-            "Kiến trúc multi-tenant, phân quyền OWNER / MANAGER / STAFF theo từng cửa hàng",
-            "Xác thực JWT kết hợp RBAC lưu trên Redis, giảm tối đa truy vấn DB khi phân quyền",
-            "Thiết kế schema quan hệ 20+ bảng: đơn hàng, tồn kho, thanh toán, audit log",
-            "Tối ưu hiệu năng bằng Redis cache, indexing và full-text search (PostgreSQL GIN)",
-            "Subscription billing FREE/BASIC/PRO, invoice lifecycle, scheduler tự hết hạn",
-            "Dashboard real-time với materialized view, refresh mỗi 15 phút",
+            "Multi-tenant, phân quyền theo phạm vi: OWNER / BUSINESS_MANAGER toàn doanh nghiệp, MANAGER / STAFF theo cửa hàng, SUPER_ADMIN / SUPPORT quản trị hệ thống",
+            "Bán hàng, trả hàng, nhập hàng, nhiều kho, chuyển kho, điều chỉnh tồn; công nợ khách hàng & nhà cung cấp",
+            "Subscription FREE / BASIC / PRO, nâng cấp bằng chuyển khoản QR, invoice lifecycle, scheduler tự hết hạn gói",
+            "Rate limiting nhiều tầng (IP, user, login sai) bằng Bucket4j + Redis; idempotency cho request ghi",
+            "Redis cache phân quyền cửa hàng (TTL 5 phút), vẫn chạy được khi tắt Redis",
+            "Dashboard với materialized view refresh mỗi 15 phút; full-text search bằng PostgreSQL GIN index",
+            "Schema ~36 bảng quản lý bằng Flyway; audit log snapshot trước/sau, thống kê traffic API",
+            "Quét mã vạch bằng camera, import CSV, xuất Excel; web song ngữ VI / EN, sáng / tối",
           ],
-          status: "Phase 1 hoàn thiện",
+          status: "Hoàn thành · Đang chạy demo",
+          image: {
+            src: "/projects/quiktech/app-dashboard.png",
+            srcDark: "/projects/quiktech/app-dashboard-dark.png",
+            alt: "Dashboard của QuikTech POS",
+          },
+          demo: { url: "https://pos.nhatnguyenhuynh.com", login: "user1 / password" },
+          api: "https://quiktech-pos-api-8217b2.azurewebsites.net/swagger-ui/index.html",
+          repos: [
+            { label: "Backend", url: "https://github.com/NguyenAlpha/omniflow-backend" },
+            { label: "Frontend", url: "https://github.com/NguyenAlpha/quik-tech-web" },
+          ],
         },
       ],
     },
@@ -198,23 +219,38 @@ export const CONTENT: Record<Lang, Dict> = {
     projects: {
       title: "Featured Projects",
       subtitle: "Products I have built",
+      demoLabel: "Live demo",
+      loginLabel: "Demo login",
       items: [
         {
-          name: "QuikTech — POS & Inventory",
+          name: "QuikTech POS",
           period: "Dec 2025 – Apr 2026",
-          tagline: "Multi-tenant B2B SaaS for point-of-sale & inventory management",
+          tagline: "Sales, inventory & debt management — Multi-tenant B2B SaaS",
           description:
-            "A POS & inventory backend supporting business and store-level operations, with 16+ modules: sales, purchasing, inventory, debt, subscription billing, and dashboard analytics.",
-          tech: ["Java 21", "Spring Boot 3.5", "PostgreSQL", "Redis", "JWT", "Next.js", "TypeScript"],
+            "Point-of-sale, inventory and debt management for small businesses: one business runs many stores, with data isolated per store and role-based access. Built both the backend (Spring Boot) and frontend (Next.js), deployed on Azure and Vercel.",
+          tech: ["Java 25", "Spring Boot 4.1", "Spring Security + JWT", "PostgreSQL 16", "Flyway", "Redis 7", "Bucket4j", "Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "Docker", "Azure", "Vercel"],
           features: [
-            "Multi-tenant architecture with OWNER / MANAGER / STAFF roles per store",
-            "JWT authentication with Redis-backed RBAC, minimizing DB calls during authorization",
-            "Relational schema of 20+ tables: orders, inventory, payments, audit logs",
-            "Performance tuned with Redis caching, indexing and full-text search (PostgreSQL GIN)",
-            "Subscription billing FREE/BASIC/PRO, invoice lifecycle, auto-expire scheduler",
-            "Real-time dashboard powered by materialized views, refreshed every 15 minutes",
+            "Multi-tenant, scope-based roles: OWNER / BUSINESS_MANAGER across the business, MANAGER / STAFF per store, SUPER_ADMIN / SUPPORT for system admin",
+            "Sales, returns, purchasing, multiple warehouses, stock transfers and adjustments; customer & supplier debt",
+            "Subscription FREE / BASIC / PRO, QR bank-transfer upgrades, invoice lifecycle, auto-expire scheduler",
+            "Multi-layer rate limiting (IP, user, failed logins) with Bucket4j + Redis; idempotent write requests",
+            "Redis-cached store permissions (5-minute TTL), still runs with Redis disabled",
+            "Dashboard on materialized views refreshed every 15 minutes; full-text search with PostgreSQL GIN indexes",
+            "~36-table schema managed by Flyway; before/after audit log snapshots, API traffic stats",
+            "Camera barcode scanning, CSV import, Excel export; bilingual VI / EN UI with light / dark themes",
           ],
-          status: "Phase 1 completed",
+          status: "Completed · Live demo",
+          image: {
+            src: "/projects/quiktech/app-dashboard.png",
+            srcDark: "/projects/quiktech/app-dashboard-dark.png",
+            alt: "QuikTech POS dashboard",
+          },
+          demo: { url: "https://pos.nhatnguyenhuynh.com", login: "user1 / password" },
+          api: "https://quiktech-pos-api-8217b2.azurewebsites.net/swagger-ui/index.html",
+          repos: [
+            { label: "Backend", url: "https://github.com/NguyenAlpha/omniflow-backend" },
+            { label: "Frontend", url: "https://github.com/NguyenAlpha/quik-tech-web" },
+          ],
         },
       ],
     },

@@ -1,9 +1,9 @@
 "use client";
 
-import { Check } from "lucide-react";
+import Image from "next/image";
+import { Check, ExternalLink } from "lucide-react";
 import { Github } from "./SocialIcons";
 import { useLang } from "./providers";
-import { PROFILE } from "@/lib/content";
 import { Section, SectionHeading } from "./Section";
 import { Reveal } from "./Reveal";
 
@@ -18,6 +18,30 @@ export function Projects() {
           <Reveal key={p.name} delay={i * 0.1}>
             <article className="group relative rounded-3xl border border-[var(--card-border)] bg-card p-7 sm:p-9 hover:border-primary/50 transition-colors overflow-hidden">
               <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
+              <a
+                href={p.demo.url}
+                target="_blank"
+                rel="noreferrer"
+                className="relative block mb-6 overflow-hidden rounded-2xl border border-[var(--card-border)]"
+              >
+                <Image
+                  src={p.image.src}
+                  alt={p.image.alt}
+                  width={2880}
+                  height={1800}
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-[1.02] dark:hidden"
+                />
+                <Image
+                  src={p.image.srcDark}
+                  alt={p.image.alt}
+                  width={2880}
+                  height={1800}
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="hidden w-full h-auto transition-transform duration-500 group-hover:scale-[1.02] dark:block"
+                />
+              </a>
 
               <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <div>
@@ -54,17 +78,42 @@ export function Projects() {
                 ))}
               </div>
 
-              <div className="relative flex flex-wrap gap-3">
+              <div className="relative flex flex-wrap items-center gap-3">
                 <a
-                  href={PROFILE.github}
+                  href={p.demo.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:brightness-110 transition-all"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  {t.projects.demoLabel}
+                </a>
+                {p.repos.map((repo) => (
+                  <a
+                    key={repo.url}
+                    href={repo.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
+                  >
+                    <Github className="w-4 h-4" />
+                    {repo.label}
+                  </a>
+                ))}
+                <a
+                  href={p.api}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
                 >
-                  <Github className="w-4 h-4" />
-                  GitHub
+                  <ExternalLink className="w-4 h-4" />
+                  Swagger
                 </a>
               </div>
+
+              <p className="relative mt-4 text-xs text-muted">
+                {t.projects.loginLabel}: <span className="font-mono">{p.demo.login}</span>
+              </p>
             </article>
           </Reveal>
         ))}
