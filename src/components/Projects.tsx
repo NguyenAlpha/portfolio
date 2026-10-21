@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { Check, ExternalLink } from "lucide-react";
 import { Github } from "./SocialIcons";
 import { useLang } from "./providers";
 import { Section, SectionHeading } from "./Section";
 import { Reveal } from "./Reveal";
+import { ProjectGallery } from "./ProjectGallery";
 
 export function Projects() {
   const { t } = useLang();
@@ -19,29 +19,7 @@ export function Projects() {
             <article className="group relative rounded-3xl border border-[var(--card-border)] bg-card p-7 sm:p-9 hover:border-primary/50 transition-colors overflow-hidden">
               <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
-              <a
-                href={p.demo.url}
-                target="_blank"
-                rel="noreferrer"
-                className="relative block mb-6 overflow-hidden rounded-2xl border border-[var(--card-border)]"
-              >
-                <Image
-                  src={p.image.src}
-                  alt={p.image.alt}
-                  width={2880}
-                  height={1800}
-                  sizes="(max-width: 1024px) 100vw, 1024px"
-                  className="w-full h-auto transition-transform duration-500 group-hover:scale-[1.02] dark:hidden"
-                />
-                <Image
-                  src={p.image.srcDark}
-                  alt={p.image.alt}
-                  width={2880}
-                  height={1800}
-                  sizes="(max-width: 1024px) 100vw, 1024px"
-                  className="hidden w-full h-auto transition-transform duration-500 group-hover:scale-[1.02] dark:block"
-                />
-              </a>
+              <ProjectGallery images={p.images} />
 
               <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <div>

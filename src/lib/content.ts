@@ -30,6 +30,10 @@ type Dict = {
     subtitle: string;
     demoLabel: string;
     loginLabel: string;
+    prevImage: string;
+    nextImage: string;
+    viewImage: string;
+    closeImage: string;
     items: {
       name: string;
       period: string;
@@ -38,7 +42,7 @@ type Dict = {
       tech: string[];
       features: string[];
       status: string;
-      image: { src: string; srcDark: string; alt: string };
+      images: { src: string; srcDark: string; alt: string }[];
       demo: { url: string; login: string };
       api: string;
       repos: { label: string; url: string }[];
@@ -121,6 +125,10 @@ export const CONTENT: Record<Lang, Dict> = {
       subtitle: "Những sản phẩm tôi đã xây dựng",
       demoLabel: "Xem demo",
       loginLabel: "Tài khoản thử",
+      prevImage: "Ảnh trước",
+      nextImage: "Ảnh tiếp theo",
+      viewImage: "Xem ảnh",
+      closeImage: "Đóng",
       items: [
         {
           name: "QuikTech POS",
@@ -140,16 +148,48 @@ export const CONTENT: Record<Lang, Dict> = {
             "Quét mã vạch bằng camera, import CSV, xuất Excel; web song ngữ VI / EN, sáng / tối",
           ],
           status: "Hoàn thành · Đang chạy demo",
-          image: {
-            src: "/projects/quiktech/app-dashboard.png",
-            srcDark: "/projects/quiktech/app-dashboard-dark.png",
-            alt: "Dashboard của QuikTech POS",
-          },
+          images: [
+            {
+              src: "/projects/quiktech/app-dashboard.png",
+              srcDark: "/projects/quiktech/app-dashboard-dark.png",
+              alt: "Dashboard",
+            },
+            {
+              src: "/projects/quiktech/app-orders.png",
+              srcDark: "/projects/quiktech/app-orders-dark.png",
+              alt: "Đơn bán hàng",
+            },
+            {
+              src: "/projects/quiktech/app-products.png",
+              srcDark: "/projects/quiktech/app-products-dark.png",
+              alt: "Sản phẩm",
+            },
+            {
+              src: "/projects/quiktech/app-purchase-orders.png",
+              srcDark: "/projects/quiktech/app-purchase-orders-dark.png",
+              alt: "Đơn nhập hàng",
+            },
+            {
+              src: "/projects/quiktech/app-payments.png",
+              srcDark: "/projects/quiktech/app-payments-dark.png",
+              alt: "Thanh toán & công nợ",
+            },
+            {
+              src: "/projects/quiktech/app-subscription.png",
+              srcDark: "/projects/quiktech/app-subscription-dark.png",
+              alt: "Gói dịch vụ",
+            },
+            {
+              src: "/projects/quiktech/app-notifications.png",
+              srcDark: "/projects/quiktech/app-notifications-dark.png",
+              alt: "Thông báo",
+            },
+          ],
           demo: { url: "https://pos.nhatnguyenhuynh.com", login: "user1 / password" },
           api: "https://quiktech-pos-api-8217b2.azurewebsites.net/swagger-ui/index.html",
           repos: [
-            { label: "Backend", url: "https://github.com/NguyenAlpha/omniflow-backend" },
-            { label: "Frontend", url: "https://github.com/NguyenAlpha/quik-tech-web" },
+            { label: "Backend", url: "https://github.com/NguyenAlpha/quiktech-pos-backend" },
+            { label: "Frontend", url: "https://github.com/NguyenAlpha/quiktech-pos-frontend" },
           ],
         },
       ],
@@ -221,6 +261,10 @@ export const CONTENT: Record<Lang, Dict> = {
       subtitle: "Products I have built",
       demoLabel: "Live demo",
       loginLabel: "Demo login",
+      prevImage: "Previous image",
+      nextImage: "Next image",
+      viewImage: "View image",
+      closeImage: "Close",
       items: [
         {
           name: "QuikTech POS",
@@ -240,16 +284,48 @@ export const CONTENT: Record<Lang, Dict> = {
             "Camera barcode scanning, CSV import, Excel export; bilingual VI / EN UI with light / dark themes",
           ],
           status: "Completed · Live demo",
-          image: {
-            src: "/projects/quiktech/app-dashboard.png",
-            srcDark: "/projects/quiktech/app-dashboard-dark.png",
-            alt: "QuikTech POS dashboard",
-          },
+          images: [
+            {
+              src: "/projects/quiktech/app-dashboard.png",
+              srcDark: "/projects/quiktech/app-dashboard-dark.png",
+              alt: "Dashboard",
+            },
+            {
+              src: "/projects/quiktech/app-orders.png",
+              srcDark: "/projects/quiktech/app-orders-dark.png",
+              alt: "Sales orders",
+            },
+            {
+              src: "/projects/quiktech/app-products.png",
+              srcDark: "/projects/quiktech/app-products-dark.png",
+              alt: "Products",
+            },
+            {
+              src: "/projects/quiktech/app-purchase-orders.png",
+              srcDark: "/projects/quiktech/app-purchase-orders-dark.png",
+              alt: "Purchase orders",
+            },
+            {
+              src: "/projects/quiktech/app-payments.png",
+              srcDark: "/projects/quiktech/app-payments-dark.png",
+              alt: "Payments & debt",
+            },
+            {
+              src: "/projects/quiktech/app-subscription.png",
+              srcDark: "/projects/quiktech/app-subscription-dark.png",
+              alt: "Subscription plans",
+            },
+            {
+              src: "/projects/quiktech/app-notifications.png",
+              srcDark: "/projects/quiktech/app-notifications-dark.png",
+              alt: "Notifications",
+            },
+          ],
           demo: { url: "https://pos.nhatnguyenhuynh.com", login: "user1 / password" },
           api: "https://quiktech-pos-api-8217b2.azurewebsites.net/swagger-ui/index.html",
           repos: [
-            { label: "Backend", url: "https://github.com/NguyenAlpha/omniflow-backend" },
-            { label: "Frontend", url: "https://github.com/NguyenAlpha/quik-tech-web" },
+            { label: "Backend", url: "https://github.com/NguyenAlpha/quiktech-pos-backend" },
+            { label: "Frontend", url: "https://github.com/NguyenAlpha/quiktech-pos-frontend" },
           ],
         },
       ],
