@@ -19,7 +19,7 @@ export function Projects() {
             <article className="group relative rounded-3xl border border-[var(--card-border)] bg-card p-7 sm:p-9 hover:border-primary/50 transition-colors overflow-hidden">
               <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
-              <ProjectGallery images={p.images} />
+              {p.images.length > 0 && <ProjectGallery images={p.images} />}
 
               <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <div>
