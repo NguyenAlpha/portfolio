@@ -12,6 +12,8 @@ export const PROFILE = {
   facebook: "https://www.facebook.com/nnguyen2005",
 };
 
+export type Diagram = { src: string; srcDark: string; alt: string; width: number; height: number };
+
 type Dict = {
   nav: { about: string; skills: string; projects: string; education: string; contact: string };
   hero: {
@@ -34,6 +36,14 @@ type Dict = {
     nextImage: string;
     viewImage: string;
     closeImage: string;
+    detailLabel: string;
+    backLabel: string;
+    architectureTitle: string;
+    componentsTitle: string;
+    zoomHint: string;
+    zoomIn: string;
+    zoomOut: string;
+    resetZoom: string;
     items: {
       name: string;
       period: string;
@@ -46,6 +56,19 @@ type Dict = {
       demo: { url: string; login: string };
       api: string;
       repos: { label: string; url: string }[];
+      detail?: {
+        slug: string;
+        architecture: {
+          intro: string;
+          diagram: Diagram;
+          points: { title: string; body: string }[];
+        };
+        components: {
+          intro: string;
+          diagram: Diagram;
+          points: { title: string; body: string }[];
+        };
+      };
     }[];
   };
   education: {
@@ -69,6 +92,8 @@ type Dict = {
   footer: string;
   builtWith: string;
 };
+
+export type Project = Dict["projects"]["items"][number];
 
 export const TECH_STACK = [
   "Next.js",
@@ -129,6 +154,14 @@ export const CONTENT: Record<Lang, Dict> = {
       nextImage: "Ảnh tiếp theo",
       viewImage: "Xem ảnh",
       closeImage: "Đóng",
+      detailLabel: "Xem chi tiết",
+      backLabel: "Tất cả dự án",
+      architectureTitle: "Kiến trúc hệ thống",
+      componentsTitle: "Bên trong API",
+      zoomHint: "Bấm để phóng to",
+      zoomIn: "Phóng to",
+      zoomOut: "Thu nhỏ",
+      resetZoom: "Về kích thước ban đầu",
       items: [
         {
           name: "QuikTech POS",
@@ -214,6 +247,75 @@ export const CONTENT: Record<Lang, Dict> = {
           demo: { url: "https://hrm.nhatnguyenhuynh.com", login: "owner · hr · employee / password" },
           api: "https://hrm-api-94ee02.azurewebsites.net/swagger-ui/index.html",
           repos: [{ label: "GitHub", url: "https://github.com/NguyenAlpha/HRM-system" }],
+          detail: {
+            slug: "hrm",
+            architecture: {
+              intro:
+                "Ba tầng tách biệt: trình duyệt chỉ nói chuyện với Next.js trên Vercel, Next.js gọi REST API Spring Boot trên Azure, và API là nơi duy nhất truy cập PostgreSQL.",
+              diagram: {
+                src: "/projects/hrm/architecture.svg",
+                srcDark: "/projects/hrm/architecture-dark.svg",
+                alt: "Sơ đồ kiến trúc HRM System",
+                width: 800,
+                height: 965,
+              },
+              points: [
+                {
+                  title: "Next.js làm BFF, trình duyệt không giữ token",
+                  body: "Route Handlers của Next.js đứng giữa trình duyệt và API. JWT nằm trong cookie HttpOnly phía server, nên JavaScript trên trình duyệt không đọc được token.",
+                },
+                {
+                  title: "REST API qua HTTPS với Bearer JWT",
+                  body: "Next.js gửi request REST / JSON kèm access token tới Spring Boot 4 chạy Java 25 trên Azure App Service.",
+                },
+                {
+                  title: "Spring Security làm OAuth2 Resource Server",
+                  body: "Xác thực JWT HS256 cho mọi request; refresh token được xoay vòng và thu hồi mọi phiên khi phát hiện token bị dùng lại.",
+                },
+                {
+                  title: "Controller, service và scheduler",
+                  body: "Controller kiểm tra quyền bằng @PreAuthorize và được mô tả bằng Swagger. Service chứa RBAC theo phạm vi, tính lương, chấm công, nghỉ phép. Job @Scheduled chuẩn bị bảng chấm công và xử lý đơn nghỉ việc đến hạn.",
+                },
+                {
+                  title: "JPA / Hibernate với khóa bi quan",
+                  body: "Các thao tác ghi dễ tranh chấp như kỳ lương, chấm công, đơn nghỉ dùng PESSIMISTIC_WRITE (SELECT … FOR UPDATE).",
+                },
+                {
+                  title: "PostgreSQL 16 giữ toàn vẹn dữ liệu",
+                  body: "Azure Database for PostgreSQL Flexible Server, 33 bảng, ràng buộc EXCLUDE USING GIST chống chồng lấn khoảng hiệu lực. Flyway chạy migration và seeder dữ liệu demo khi ứng dụng khởi động.",
+                },
+              ],
+            },
+            components: {
+              intro:
+                "Sơ đồ thành phần của ứng dụng Spring Boot: mỗi request đi qua lớp bảo mật, vào module nghiệp vụ, được giới hạn theo phạm vi dữ liệu rồi mới chạm tới database.",
+              diagram: {
+                src: "/projects/hrm/component.svg",
+                srcDark: "/projects/hrm/component-dark.svg",
+                alt: "Sơ đồ thành phần bên trong API của HRM System",
+                width: 2227,
+                height: 1058,
+              },
+              points: [
+                {
+                  title: "Security Filter Chain",
+                  body: "Xác thực JWT HS256 và chuyển role, permission thành authority trước khi request vào controller.",
+                },
+                {
+                  title: "Module nghiệp vụ",
+                  body: "Mỗi domain là một cặp REST controller + service: Auth, RBAC, Tổ chức & nhân viên, Nghỉ phép, Chấm công, Tính lương, Báo cáo. Payroll lấy ngày công từ Attendance, Leave cập nhật bảng chấm công.",
+                },
+                {
+                  title: "Access Control",
+                  body: "Tính quyền hiệu lực và phạm vi dữ liệu của người dùng, chuyển thành JPA Specification để lọc ngay trong câu truy vấn.",
+                },
+                {
+                  title: "Repositories & khởi động",
+                  body: "Spring Data JPA / Hibernate truy cập PostgreSQL, dùng khóa PESSIMISTIC_WRITE cho thao tác ghi dễ tranh chấp. Flyway và seeder chạy khi ứng dụng khởi động; job @Scheduled chạy theo giờ Việt Nam.",
+                },
+              ],
+            },
+          },
         },
       ],
     },
@@ -288,6 +390,14 @@ export const CONTENT: Record<Lang, Dict> = {
       nextImage: "Next image",
       viewImage: "View image",
       closeImage: "Close",
+      detailLabel: "View details",
+      backLabel: "All projects",
+      architectureTitle: "System architecture",
+      componentsTitle: "Inside the API",
+      zoomHint: "Click to zoom",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      resetZoom: "Reset zoom",
       items: [
         {
           name: "QuikTech POS",
@@ -373,6 +483,75 @@ export const CONTENT: Record<Lang, Dict> = {
           demo: { url: "https://hrm.nhatnguyenhuynh.com", login: "owner · hr · employee / password" },
           api: "https://hrm-api-94ee02.azurewebsites.net/swagger-ui/index.html",
           repos: [{ label: "GitHub", url: "https://github.com/NguyenAlpha/HRM-system" }],
+          detail: {
+            slug: "hrm",
+            architecture: {
+              intro:
+                "Three separate tiers: the browser only talks to Next.js on Vercel, Next.js calls the Spring Boot REST API on Azure, and the API is the only thing that touches PostgreSQL.",
+              diagram: {
+                src: "/projects/hrm/architecture.svg",
+                srcDark: "/projects/hrm/architecture-dark.svg",
+                alt: "HRM System architecture diagram",
+                width: 800,
+                height: 965,
+              },
+              points: [
+                {
+                  title: "Next.js as a BFF, no tokens in the browser",
+                  body: "Next.js Route Handlers sit between the browser and the API. JWTs live in server-side HttpOnly cookies, so browser JavaScript can never read them.",
+                },
+                {
+                  title: "REST over HTTPS with Bearer JWT",
+                  body: "Next.js sends REST / JSON requests with the access token to Spring Boot 4 on Java 25, hosted on Azure App Service.",
+                },
+                {
+                  title: "Spring Security as an OAuth2 Resource Server",
+                  body: "Every request is authenticated with HS256 JWTs; refresh tokens rotate, and all sessions are revoked when token reuse is detected.",
+                },
+                {
+                  title: "Controllers, services and schedulers",
+                  body: "Controllers enforce permissions with @PreAuthorize and are documented with Swagger. Services hold scoped RBAC, payroll, attendance and leave logic. @Scheduled jobs prepare monthly attendance and process due resignations.",
+                },
+                {
+                  title: "JPA / Hibernate with pessimistic locking",
+                  body: "Contended writes such as payroll periods, attendance and leave requests use PESSIMISTIC_WRITE (SELECT … FOR UPDATE).",
+                },
+                {
+                  title: "PostgreSQL 16 enforces integrity",
+                  body: "Azure Database for PostgreSQL Flexible Server with 33 tables and EXCLUDE USING GIST constraints preventing overlapping validity ranges. Flyway runs migrations and demo data seeders on startup.",
+                },
+              ],
+            },
+            components: {
+              intro:
+                "Component view of the Spring Boot application: every request passes the security layer, reaches a domain module and is narrowed to the caller's data scope before it touches the database.",
+              diagram: {
+                src: "/projects/hrm/component.svg",
+                srcDark: "/projects/hrm/component-dark.svg",
+                alt: "HRM System API component diagram",
+                width: 2227,
+                height: 1058,
+              },
+              points: [
+                {
+                  title: "Security Filter Chain",
+                  body: "Verifies HS256 JWTs and maps roles and permissions to authorities before a request reaches a controller.",
+                },
+                {
+                  title: "Domain modules",
+                  body: "Each domain is a REST controller + service pair: Auth, RBAC, Organization & employees, Leave, Attendance, Payroll, Reports. Payroll reads workdays from Attendance; Leave updates timesheets.",
+                },
+                {
+                  title: "Access Control",
+                  body: "Resolves the caller's effective permissions and data scope into a JPA Specification, filtering inside the query itself.",
+                },
+                {
+                  title: "Repositories & startup",
+                  body: "Spring Data JPA / Hibernate over PostgreSQL, with PESSIMISTIC_WRITE locks on contended writes. Flyway and seeders run on startup; @Scheduled jobs run on Vietnam time.",
+                },
+              ],
+            },
+          },
         },
       ],
     },

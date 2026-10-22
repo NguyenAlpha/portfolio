@@ -22,11 +22,11 @@ export function Navbar() {
   }, []);
 
   const links = [
-    { href: "#about", label: t.nav.about },
-    { href: "#skills", label: t.nav.skills },
-    { href: "#projects", label: t.nav.projects },
-    { href: "#education", label: t.nav.education },
-    { href: "#contact", label: t.nav.contact },
+    { href: "/#about", label: t.nav.about },
+    { href: "/#skills", label: t.nav.skills },
+    { href: "/#projects", label: t.nav.projects },
+    { href: "/#education", label: t.nav.education },
+    { href: "/#contact", label: t.nav.contact },
   ];
 
   return (
@@ -38,7 +38,7 @@ export function Navbar() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-        <a href="#home" className="font-mono font-bold text-lg tracking-tight">
+        <a href="/#home" className="font-mono font-bold text-lg tracking-tight">
           <span className="text-primary">&lt;</span>
           {PROFILE.displayName}
           <span className="text-primary"> /&gt;</span>

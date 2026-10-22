@@ -1,11 +1,14 @@
 "use client";
 
-import { Check, ExternalLink } from "lucide-react";
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { ArrowRight, Check, ExternalLink } from "lucide-react";
 import { Github } from "./SocialIcons";
 import { useLang } from "./providers";
 import { Section, SectionHeading } from "./Section";
 import { Reveal } from "./Reveal";
 import { ProjectGallery } from "./ProjectGallery";
+import type { Project } from "@/lib/content";
 
 export function Projects() {
   const { t } = useLang();
@@ -56,46 +59,67 @@ export function Projects() {
                 ))}
               </div>
 
-              <div className="relative flex flex-wrap items-center gap-3">
-                <a
-                  href={p.demo.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:brightness-110 transition-all"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  {t.projects.demoLabel}
-                </a>
-                {p.repos.map((repo) => (
-                  <a
-                    key={repo.url}
-                    href={repo.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
+              <ProjectLinks project={p}>
+                {p.detail && (
+                  <Link
+                    href={`/projects/${p.detail.slug}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-primary text-primary hover:bg-primary/10 transition-colors"
                   >
-                    <Github className="w-4 h-4" />
-                    {repo.label}
-                  </a>
-                ))}
-                <a
-                  href={p.api}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Swagger
-                </a>
-              </div>
-
-              <p className="relative mt-4 text-xs text-muted">
-                {t.projects.loginLabel}: <span className="font-mono">{p.demo.login}</span>
-              </p>
+                    {t.projects.detailLabel}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                )}
+              </ProjectLinks>
             </article>
           </Reveal>
         ))}
       </div>
     </Section>
+  );
+}
+
+export function ProjectLinks({ project: p, children }: { project: Project; children?: ReactNode }) {
+  const { t } = useLang();
+
+  return (
+    <>
+      <div className="relative flex flex-wrap items-center gap-3">
+        <a
+          href={p.demo.url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:brightness-110 transition-all"
+        >
+          <ExternalLink className="w-4 h-4" />
+          {t.projects.demoLabel}
+        </a>
+        {children}
+        {p.repos.map((repo) => (
+          <a
+            key={repo.url}
+            href={repo.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
+          >
+            <Github className="w-4 h-4" />
+            {repo.label}
+          </a>
+        ))}
+        <a
+          href={p.api}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--card-border)] hover:border-primary hover:text-primary transition-colors"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Swagger
+        </a>
+      </div>
+
+      <p className="relative mt-4 text-xs text-muted">
+        {t.projects.loginLabel}: <span className="font-mono">{p.demo.login}</span>
+      </p>
+    </>
   );
 }
