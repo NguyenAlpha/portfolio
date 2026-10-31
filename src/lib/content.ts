@@ -5,7 +5,7 @@ export const PROFILE = {
   displayName: "Nhat Nguyen",
   email: "nhatnguyen27042005@gmail.com",
   phone: "+84 963944370",
-  cv: "/Nhat-Nguyen-CV.pdf",
+  cv: "/Nhat-Nguyen-CV-backend.pdf",
   github: "https://github.com/NguyenAlpha",
   linkedin:
     "https://www.linkedin.com/in/nguy%C3%AAn-hu%E1%BB%B3nh-tr%E1%BA%A7n-nh%E1%BA%ADt-7a8269401/",
@@ -83,10 +83,6 @@ type Dict = {
   contact: {
     title: string;
     subtitle: string;
-    nameLabel: string;
-    emailLabel: string;
-    messageLabel: string;
-    send: string;
     orReach: string;
   };
   footer: string;
@@ -331,11 +327,7 @@ export const CONTENT: Record<Lang, Dict> = {
     contact: {
       title: "Liên hệ",
       subtitle: "Có cơ hội phù hợp? Hãy nhắn cho tôi một lời.",
-      nameLabel: "Tên của bạn",
-      emailLabel: "Email của bạn",
-      messageLabel: "Nội dung",
-      send: "Gửi tin nhắn",
-      orReach: "Hoặc kết nối qua",
+      orReach: "Kết nối với tôi qua",
     },
     footer: "Thiết kế & phát triển bởi",
     builtWith: "Xây dựng bằng",
@@ -567,11 +559,7 @@ export const CONTENT: Record<Lang, Dict> = {
     contact: {
       title: "Contact",
       subtitle: "Got an opportunity that fits? Drop me a message.",
-      nameLabel: "Your name",
-      emailLabel: "Your email",
-      messageLabel: "Message",
-      send: "Send message",
-      orReach: "Or reach me on",
+      orReach: "Reach me on",
     },
     footer: "Designed & built by",
     builtWith: "Built with",
